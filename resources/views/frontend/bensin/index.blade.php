@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 @section('title')
-    Riwayat Bahan Bakar
+Riwayat Bahan Bakar
 @endsection
 
 
@@ -24,40 +24,36 @@
             </div>
         </div>
     </div>
-    <!-- /Header -->
-
     <div class="page-content">
         <div class="list no-hairlines media-list project-list mx-3">
-            <div class="container">
-                <ul class="row">
-                    @forelse ($data as $item)
-                    <li class="col-12">
-                        <a href="{{ route('cuti.show', $item->id) }}" class="item-link item-content pl-0 pr-0">
-                            <div class="item-inner">
-                                <div class="item-title-row">
-                                    <div class="item-title">
-                                        <h4><strong>Rp. {{ number_format($item->harga) }}</strong></h4>
-                                    </div>
-                                </div>
-                                <div class="pro-info clearfix">
-                                    <div class="pro-left">
-                                        <p>{{ Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd, LL') }}</p>
-                                    </div>
-                                    <div class="pro-right">
-                                        <p class="badge {{ ($item->status == 0) ? 'badge-warning' : 'badge-success'}} px-4 py-2 rounded">{{ ($item->status == 0) ? 'Menunggu' : 'Diterima'}}</p>
-                                    </div>
-                                </div>
-                            </div>
+            @forelse ($data as $item)
+            <div class="card d-flex shadow">
+                <div class="card-body d-flex justify-content-between">
+                    <div>
+                        <h4>Rp. {{ number_format($item->harga) }}</h4>
+                        <small
+                            class="text-muted">{{ Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('LL') }}</small>
+                        <span class="badge badge-warning badge-pill mx-2 px-3 py-2">Status
+                        </span>
+                    </div>
+                    <div>
+                        <a class="badge badge-danger badge-pill px-3 py-2 text-white"
+                            onclick="event.preventDefault(); document.getElementById('form-delete').submit();">
+                            <span><i class="fas fa-trash"></i></span>
                         </a>
-                    </li>
-                    @empty
-                    <li class="col-12 text-center">
-                        <h5 class="pt-3 p-1">Tidak Ada Data Riwayat Pembelian</h5>
-                        <a href="{{ route('bensin.create') }}" class="btn btn-primary mb-3">Catat Pembelian</a>
-                    </li>
-                    @endforelse
-                </ul>
+                        <form id="form-delete" action="{{ route('bensin.destroy', $item->id) }}" method="POST"
+                            class="d-none">
+                            @method('DELETE')
+                            @csrf
+                        </form>
+                    </div>
+                </div>
             </div>
+            @empty
+            <div class="text-center">
+                <h5>Belum Ada Catatan</h5>
+            </div>
+            @endforelse
         </div>
     </div>
 </div>

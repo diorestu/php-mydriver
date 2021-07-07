@@ -6,27 +6,6 @@
 
 @push('addon-style')
 <link href="{{ asset('backend/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-<!-- Load google API -->
-<script src="https://maps.googleapis.com/maps/api/js"></script>
-<script>
-    function initialize() {
-      var options = {
-        center:new google.maps.LatLng(-6.9147444,107.6098111), // longitude latitude bandung
-        zoom:17,
-        mapTypeId:google.maps.MapTypeId.ROADMAP // Tipe ROADMAP
-      };
-      // create map object
-      var map=new google.maps.Map(document.getElementById("googleMap"),options);
-      var marker = new google.maps.Marker({
-          position: new google.maps.LatLng(-6.9147444,107.6098111), // longitude latitude
-          animation: google.maps.Animation.BOUNCE,
-          map: map,
-          title: 'Lokasi Absen Hadir'
-      });
-    }
-    // membuat Event Listener untuk memanggil fungsi initialize pada saat halaman selesai di load
-    google.maps.event.addDomListener(window, 'load', initialize);
-</script>
 @endpush
 
 @section('content')
@@ -152,15 +131,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-12 col-lg-12">
-        <div class="card shadow mb-4">
-            <!-- Card Body -->
-            <div class="card-body">
-                <div id="googleMap" style="height:380px;"></div>
             </div>
         </div>
     </div>

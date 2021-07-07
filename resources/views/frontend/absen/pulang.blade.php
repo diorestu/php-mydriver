@@ -21,8 +21,7 @@ Absensi
 </div>
 <div class="list no-hairlines custom-form m-0">
     <div class="card-box">
-
-        <h3>Kehadiran : {{ \Carbon\Carbon::parse($data->hadir)->diffForHumans() }}</h3>
+        <h6 class="text-center">Jam Hadir Anda : {{ \Carbon\Carbon::parse($data->hadir)->diffForHumans() }}</h6>
         <form method="POST" action="{{ route('absen.update', $id) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
@@ -36,12 +35,23 @@ Absensi
                         </div>
                     </div>
                 </li>
-                <li class="item-content item-input">
+                {{-- <li class="item-content item-input">
                     <div class="item-inner">
                         <div class="item-title item-label">Gambar Pendukung</div>
                         <div class="item-input-wrap">
                             <input id="my-input" class="form-control-file" accept="image/*" accept="image/*;capture=camera" capture type="file" name="img_pulang">
                         </div>
+                    </div>
+                </li> --}}
+                <li class="item-content item-input">
+                    <div class="profile-header bg-light p-2">
+                        <div class="pro-img-box">
+                            <img alt="" src="{{ asset('frontend/img/placeholder.png') }}">
+                            <div class="pro-img-upload">
+                                <input type="file" class="upload" name="img_pulang">
+                            </div>
+                        </div>
+                        <p class="mt-2 mb-0 text-center text-dark">Klik Kamera untuk Upload Foto</p>
                     </div>
                 </li>
                 <li class="item-content item-input">

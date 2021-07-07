@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
+
 
 class FUserController extends Controller
 {
@@ -73,26 +76,36 @@ class FUserController extends Controller
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'phone' => 'required|min:11',
+            'phone' => 'required|min:8|max:14',
+            'name' => 'required|max:100',
         ]);
-
         if ($validator->fails()) {
-            return back()->with('toast_error', $validator->messages()->all()[0]);
-        }
-        // dd($data);
-        $item = User::findOrFail($id);
-
-        $item->phone = $data['phone'];
-        $item->id_cabang = $data['id_cabang'];
-        if($data['id_unit'] == 0){
-            $item->id_unit = null;
+            return back()->with('toast_error', 'Error : Mohon melengkapi data Anda');
         }else{
-            $item->id_unit = $data['id_unit'];
+
+            // Upload Images
+        $name = Str::slug(auth()->user()->name);
+        $originalImage = $request->file('photos');
+        $thumbnailImage = Image::make($originalImage);
+        $thumbnailPath = public_path() . '/storage/uploads/';
+        $thumbnailImage->fit(320);
+        // ->rotate(270);
+        $thumbnailImage->save($thumbnailPath .time() . '-' . $name . '.jpg');
+
+        $user = User::findOrFail($id);
+
+        $user->photos = time() .'-'. $name.'.jpg';
+            $user->name = $data['name'];
+            $user->phone = $data['phone'];
+            $user->id_cabang = $data['id_cabang'];
+            if ($data['id_unit'] == 0) {
+                $user->id_unit = null;
+            } else {
+                $user->id_unit = $data['id_unit'];
+            }
+            $user->save();
+            return redirect()->route('profil')->withSuccess('Profil Telah Diperbarui');
         }
-        // dd($item->id_unit);
-        $item->save();
-        // Alert::success('Profil Telah Diperbarui');
-        return redirect()->route('beranda')->withSuccess('Profil Telah Diperbarui');
     }
 
     /**

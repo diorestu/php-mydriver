@@ -21,6 +21,7 @@
         "qcod/laravel-imageup": "^1.1",
         "realrashid/sweet-alert": "^3.2",
         "silviolleite/laravelpwa": "^2.0",
+        "sopamo/laravel-filepond": "^0.6.2",
         "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {

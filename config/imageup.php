@@ -28,5 +28,5 @@ return [
     /**
      * Set an image quality
      */
-    'resize_image_quality' => 80
+    'resize_image_quality' => 70
 ];

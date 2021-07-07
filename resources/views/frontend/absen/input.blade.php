@@ -100,7 +100,7 @@ Absensi
     <div class="card-box">
         <form method="POST" action="{{ route('absen.store') }}" enctype="multipart/form-data">
             @csrf
-            <ul class="no-border pt-0 pb-4">
+            <ul class="no-border p-0 m-0">
                 <li class="item-content">
                     <div class="item-inner">
                         <div id="demo" class="text-center"></div>
@@ -115,12 +115,24 @@ Absensi
                         </div>
                     </div>
                 </li>
-                <li class="item-content item-input">
+                {{-- <li class="item-content item-input">
                     <div class="item-inner">
                         <div class="item-title item-label">Gambar Pendukung</div>
                         <div class="item-input-wrap">
                             <input id="my-input" class="form-control-file" accept="image/*" accept="image/*;capture=camera" capture type="file" name="img_hadir">
                         </div>
+                    </div>
+                </li> --}}
+                <li class="item-content item-input">
+                    <div class="profile-header bg-light p-2">
+                        <div class="pro-img-box">
+                            <img alt=""
+                                src="{{ asset('frontend/img/placeholder.png') }}">
+                            <div class="pro-img-upload">
+                                <input type="file" class="upload" name="img_hadir">
+                            </div>
+                        </div>
+                        <p class="mt-2 mb-0 text-center text-dark">Klik Kamera untuk Upload Foto</p>
                     </div>
                 </li>
                 <li class="item-content item-input">

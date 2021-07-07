@@ -85,8 +85,8 @@
                 <div class="card">
                     <div class="card-body">
                         <h6>Foto Absen Hadir</h6>
-                        <div style="max-height:300px;">
-                        <img height="300px" src="{{ asset('storage/'.$item->img_hadir) }}" alt="Foto Hadir"></div>
+                        <div style="max-height:300px;" class="text-center">
+                        <img height="200px" width="auto" src="{{ asset('storage/'.$item->img_hadir) }}" alt="Foto Hadir"></div>
                     </div>
                 </div>
             </div>
@@ -94,8 +94,8 @@
                 <div class="card">
                     <div class="card-body">
                         <h6>Foto Absen Pulang</h6>
-                        <div style="max-height:300px;">
-                        <img height="300px" src="{{ asset('storage/'.$item->img_pulang) }}" alt="Foto Pulang"></div>
+                        <div style="max-height:300px;" class="text-center">
+                        <img height="200px" width="auto" src="{{ asset('storage/'.$item->img_pulang) }}" alt="Foto Pulang"></div>
                     </div>
                 </div>
             </div>

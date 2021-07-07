@@ -14,9 +14,9 @@ Absensi
         background: #FFE4E1;
     }
 </style>
- <!-- Load google API -->
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
-    <script>
+<!-- Load google API -->
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+<script>
     function initialize() {
       var options = {
         center:new google.maps.LatLng(position.coords.latitude.toFixed(7),position.coords.longitude.toFixed(7)), // longitude latitude bandung
@@ -33,7 +33,7 @@ Absensi
     }
     // membuat Event Listener untuk memanggil fungsi initialize pada saat halaman selesai di load
     google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
+</script>
 @endpush
 
 @section('content')
@@ -74,11 +74,11 @@ Absensi
                 <div class="punch-widget">
                     @php
                     if($absen != null){
-                        if($absen->pulang){
-                            $pulang = Carbon\Carbon::parse($absen->pulang)->format('H:i');
-                        }else{
-                            $pulang = '--:--';
-                        }
+                    if($absen->pulang){
+                    $pulang = Carbon\Carbon::parse($absen->pulang)->format('H:i');
+                    }else{
+                    $pulang = '--:--';
+                    }
                     }else{
                     $pulang = '--:--';
                     }
@@ -86,9 +86,6 @@ Absensi
                     <h2>{{ $pulang }}</h2>
                     <p>Jam Pulang</p>
                 </div>
-            </div>
-            <div class="col-12 text-center">
-                <h4 class="hours-title">Total Jam Kerja: <span></span></h4>
             </div>
             <div>
             </div>
@@ -98,31 +95,37 @@ Absensi
 
         @php
         if($absen != null){
-            if($pulang != '--:--'){
-                echo "<h4 class='text-center'>Anda telah selesai bertugas, silakan beristirahat.</br> Terima Kasih</h4>";
-            }else{
+        if($pulang != '--:--'){
+        echo "<h4 class='text-center'>Anda telah selesai bertugas, silakan beristirahat.</br> Terima Kasih</h4>";
+        }else{
 
-                echo "<a id='btn' href='".route('absen.edit', $absen->id)."' class='btn btn-success btn-block my-2 py-3'
-                    type='button'>ABSEN
-                    PULANG</a>";
-            }
+        echo "<a id='btn' href='".route('absen.edit', $absen->id)."' class='btn btn-success btn-block my-2 py-3'
+            type='button'>ABSEN
+            PULANG</a>";
+        }
 
         }else{
         echo "<a id='btn' href='".route('absen.create')."' class='btn btn-success btn-block my-2 py-3'
             type='button'><b>ABSEN
-            HADIR</b></a>";
+                HADIR</b></a>";
         }
         @endphp
     </div>
 </div>
 @php
-    if ($data->unitkerja == null) {
-        $lat = $data->cabang->lat;
-        $long = $data->cabang->long;
-    }else{
-        $lat = $data->unitkerja->lat;
-        $long = $data->unitkerja->long;
-    }
+if ($data->unitkerja == null) {
+$lat = $data->cabang->lat;
+$long = $data->cabang->long;
+}else{
+$lat = $data->unitkerja->lat;
+$long = $data->unitkerja->long;
+}
+
+if($data->pool == 1){
+$radius = 5000;
+}else{
+$radius = 250000;
+}
 
 @endphp
 @endsection
@@ -148,14 +151,16 @@ Absensi
         // var longitude1 = @php echo 115.19258037236996; @endphp;
         var latitude2 = @php echo $data->cabang->lat; @endphp;
         var longitude2 = @php echo $data->cabang->long; @endphp;
-
+        var radius = @php echo $radius; @endphp;
         var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(latitude1, longitude1), new
         google.maps.LatLng(latitude2.toFixed(6), longitude2.toFixed(7)));
-        if (distance >= 50000){
+        if (distance >= radius){
         $("#btn").addClass("d-none");
         $("#demo").addClass("bg-gagal");
+            demo.innerHTML = 'Maaf, Anda berada didalam radius <strong>' + distance.toFixed(1) + '</strong> meter. Mohon direfresh terlebih dulu';
         }else{
         $("#demo").addClass("bg-berhasil");
+            demo.innerHTML = 'Mantap, Anda berada didalam radius <strong>' + distance.toFixed(1) + '</strong> meter. </br>Silahkan klik tombol <strong>Absen</strong>';
         }
 
         var options = {
@@ -168,15 +173,15 @@ Absensi
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(position.coords.latitude.toFixed(7),position.coords.longitude.toFixed(7)), // longitude latitude
             map: map,
-            title: 'Bandung'
         });
 
-        demo.innerHTML = 'Anda berada di <strong>' + latitude1 + ', '+ longitude1 +'</strong> dalam radius <strong>' + distance.toFixed(2) + '</> meter';
-        
+
+
     }
 </script>
 <script>
     window.onload(getLocation());
 </script>
-
 @endpush
+{{-- demo.innerHTML = 'Anda berada di <strong>' + latitude1 + ', '+ longitude1 +'</strong> dalam radius <strong>' +
+    distance.toFixed(2) + '</> meter'; --}}

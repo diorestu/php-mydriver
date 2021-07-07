@@ -65,8 +65,26 @@ class HomeController extends Controller
         ]);
     }
 
-    public function saveProfil(Request $request, $id)
-    {
 
+    public function getCountries()
+    {
+        $id = Auth::user()->id;
+        $data = User::findOrFail($id);
+        $unit = UnitKerja::all();
+        $cabang = Cabang::all();
+        $countries = Cabang::pluck('cabang', 'id');
+        return view('frontend.profile', compact('cabang'), [
+            'data'   => $data,
+            'unit'   => $unit,
+            'cabang' => $cabang,
+        ]);
     }
+
+    public function getStates($id)
+    {
+        $states = UnitKerja::where("id_cabang", $id)->pluck('nama', 'id');
+        return json_encode($states);
+    }
+
+
 }

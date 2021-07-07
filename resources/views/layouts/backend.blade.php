@@ -55,7 +55,7 @@
                 Master
             </div>
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item {{ (Auth::user()->roles > 1) ? 'd-none' : ''}}">
+            <li class="nav-item {{ (Auth::user()->roles > 3) ? 'd-none' : ''}}">
                 <a class="nav-link collapsed py-2" data-toggle="collapse" data-target="#one" aria-expanded="true"
                     aria-controls="one">
                     <i class="fas fa-fw fa-cog"></i>

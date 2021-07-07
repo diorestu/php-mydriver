@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use phpDocumentor\Reflection\Location;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +14,10 @@ use phpDocumentor\Reflection\Location;
 |
 */
 
-Route::middleware(['auth'])->group(function () {
+Auth::routes();
+Route::middleware(['auth', 'revalidate'])->group(function () {
     Route::get('/', 'HomeController@index')->name('beranda');
-    Route::get('/profile', 'HomeController@profil')->name('profil');
+    Route::get('/profile', 'HomeController@getCountries')->name('profil');
     Route::resource('profil', 'FUserController');
     Route::resource('absen', 'FAbsensiController');
     Route::post('absen/hadir', 'FAbsensiController@hadir')->name('absen-hadir');
@@ -30,8 +30,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::prefix('admin')
-->middleware(['auth', 'is_admin'])
+->middleware(['auth', 'is_admin', 'revalidate'])
     ->group(function () {
+
     Route::get('dashboard', 'BackIndexController@index')->name('admin-dashboard');
     Route::resource('absensi', 'BackAbsenController');
     Route::post('absensi/cari', 'BackAbsenController@indexcari')->name('absensi.cari');
@@ -50,4 +51,4 @@ Route::prefix('admin')
 Route::get('admin/rekaplembur', 'BackExportController@lemburExport')->name('lembur.export');
 Route::get('admin/rekapabsen', 'BackExportController@absenExport')->name('absen.export');
 Route::get('admin/rekapbensin', 'BackExportController@bensinExport')->name('bensin.export');
-Auth::routes();
+

@@ -20,11 +20,7 @@ Dashboard
     <div class="profile-header">
         <div class="pro-img-box">
             {{-- <img alt="" src="frontend/assets/img/user.jpg"> --}}
-            <img alt=""
-                src="{{ ($data->photos == null) ? asset('frontend/assets/img/user.jpg') : asset('storage/'.$data->photos)}}">
-            {{-- <div class="pro-img-upload">
-                <input type="file" class="upload">
-            </div> --}}
+            <img alt="" src="{{ ($data->photos == null) ? asset('frontend/assets/img/user.jpg') : asset('storage/'.$data->photos)}}">
         </div>
         <div class="pro-user-det">
             <div class="profile-name">
@@ -132,7 +128,7 @@ Dashboard
                 <div class="col-6 pl-2">
                     <a href="{{ route('aktivitas.index') }}">
                         <div class="dash-widget pb-0">
-                            <div class="dash-widget-icon"><i class="fas fa-car"></i></div>
+                            <div class="dash-widget-icon"><i class="fas fa-star-half-alt"></i></div>
                             <div class="dash-widget-info">
                                 <h6>Aktivitas</h6>
                             </div>
@@ -149,16 +145,16 @@ Dashboard
                         </div>
                     </a>
                 </div>
-                {{-- <div class="col-6 pl-2">
-                    <a href="{{ route('overtime.index') }}">
+                <div class="col-6 pl-2">
+                    <a href="{{ route('car.create') }}">
                 <div class="dash-widget pb-0">
-                    <div class="dash-widget-icon"><i class="fas fa-clock"></i></div>
+                    <div class="dash-widget-icon"><i class="fas fa-car"></i></div>
                     <div class="dash-widget-info">
-                        <h6>Lembur</h6>
+                        <h6>Mobil</h6>
                     </div>
                 </div>
                 </a>
-            </div> --}}
+            </div>
         </div>
     </div>
 </div>

@@ -6,10 +6,10 @@ return [
         'name' => 'DRIVER BPD BALI',
         'short_name' => 'SID',
         'start_url' => '/login',
-        'background_color' => '#3367D6',
+        'background_color' => '#034d11',
         'theme_color' => '#000000',
         'display' => 'standalone',
-        'orientation'=> 'any',
+        'orientation'=> 'portrait',
         'status_bar'=> 'black',
         'icons' => [
             '72x72' => [

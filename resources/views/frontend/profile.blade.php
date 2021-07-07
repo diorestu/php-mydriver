@@ -1,8 +1,12 @@
 @extends('layouts.frontend')
 
 @section('title')
-Dashboard
+    Profil Pengguna
 @endsection
+
+@push('addon-style')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+@endpush
 
 @section('content')
 <!-- Header -->
@@ -19,9 +23,8 @@ Dashboard
     @csrf
     <!-- Page Content -->
     <div class="page-content mt-0">
-        <div class="profile-header">
+        {{-- <div class="profile-header">
             <div class="pro-img-box">
-                {{-- <img alt="" src="frontend/assets/img/user.jpg"> --}}
                 <img alt=""
                     src="{{ ($data->photos == null) ? asset('frontend/assets/img/user.jpg') : asset('storage/'.$data->photos)}}">
                 <div class="pro-img-upload">
@@ -37,13 +40,27 @@ Dashboard
                     </h6>
                 </div>
             </div>
-
-        </div>
+        </div> --}}
         <div class="container py-4">
+            <div class="profile-header bg-light p-2">
+                <div class="pro-img-box">
+                    <img alt=""
+                        src="{{ ($data->photos == null) ? asset('frontend/assets/img/user.jpg') : asset('storage/uploads/'.$data->photos)}}">
+                    <div class="pro-img-upload">
+                        <input type="file" class="upload" name="photos">
+                    </div>
+                </div>
+                <p class="mt-2 mb-0 text-center text-dark">Klik Kamera untuk Upload Foto</p>
+            </div>
+            <div class="form-group">
+                <label for="my-input">Nama Lengkap</label>
+                <input id="my-input" class="form-control" type="text" name="name" value="{{ $data->name }}">
+            </div>
             <div class="form-group">
                 <label for="my-input">No. HP</label>
                 <input id="my-input" class="form-control" type="text" name="phone" value="{{ $data->phone }}">
             </div>
+
             <div class="form-group">
                 <label for="my-select">Lokasi Bertugas</label>
                 <select id="my-select" class="form-control" name="id_cabang">
@@ -62,9 +79,9 @@ Dashboard
                     @endforeach
                 </select>
             </div>
-            <button class="btn btn-success btn-block" type="submit">SIMPAN</button>
+            <button class="btn btn-success btn-block py-3" type="submit">SIMPAN PROFIL SAYA</button>
         </div>
     </div>
 </form>
-
 @endsection
+

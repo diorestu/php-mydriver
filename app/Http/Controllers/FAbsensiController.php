@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Absensi;
-
+use Illuminate\Support\Facades\Validator;
 use Auth;
 use Alert;
 use Carbon\Carbon;
@@ -39,12 +39,36 @@ class FAbsensiController extends Controller
     {
         $id = auth()->user()->id;
         $data = $request->all();
-        $data['id_user'] = $id;
-        $data['hadir'] = Carbon::now()->locale('id')->isoFormat('Y-MM-D H:m:s');
-        // dd($data['hadir']);
-        Absensi::create($data);
-        Alert::success('Absensi Kehadiran Berhasil!');
-        return redirect()->route('beranda');
+
+        $validator = Validator::make($data, [
+            'deskripsi' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->with('toast_error', 'Error : Mohon isikan keterangan Anda.');
+        }else{
+            $data['id_user'] = $id;
+            $data['hadir'] = Carbon::now()->locale('id')->isoFormat('Y-MM-DD hh:m:s');
+            // dd($data['hadir']);
+            $cek = Absensi::where('id_user', $id)->whereDate('hadir', $data['hadir'])->count();
+            // dd($cek);
+            if($cek > 0){
+                return redirect()->route('beranda')->with('toast_error', 'Anda sudah Absen Hadir.');
+            }else{
+                Absensi::create($data);
+                return redirect()->route('beranda')->withSuccess('Absensi Hadir Berhasil');
+            }
+        }
+        // // Rotate Image
+        // $photo           = request()->file('img_hadir');
+        // $temp            = imagecreatefromjpeg($photo);
+        // $rotated         = imagerotate($temp, 270, 0);
+        // $extension       = $photo->getClientOriginalExtension();
+        // $fileNametoStore = time() . "___" . explode('.', $photo->getClientOriginalName())[0] . '.' . $extension;
+        // imagejpeg($rotated,  $fileNametoStore);
+        // // Rotate Image
+
+
     }
 
     /**
@@ -85,22 +109,29 @@ class FAbsensiController extends Controller
     {
         $id = auth()->user()->id;
         $data = $request->all();
-        $item = Absensi::where('id_user', $id)->whereDay('created_at', date('d'))->first();
-        $data['pulang'] = Carbon::now()->locale('id')->isoFormat('Y-MM-D H:m:s');
-        $item->update($data);
 
-        $hadir = Carbon::parse($item->hadir);
-        $pulang = Carbon::parse($data['pulang']);
-        $lamakerja = $pulang->diffInMinutes($hadir) / 60;
-        $lembur = floor($lamakerja);
-        if($lembur > 9){
-            return view('frontend.lembur.input', [
+        $validator = Validator::make($data, [
+            'deskripsi' => 'required',
+        ]);
 
-            ]);
-        }else{
-            Alert::success('Absensi Pulang Berhasil!');
-            return redirect()->route('beranda');
+        if ($validator->fails()) {
+            return back()->with('toast_error', 'Error : Mohon isikan keterangan Anda.');
+        } else {
+            $item = Absensi::where('id_user', $id)->whereDay('created_at', date('d'))->first();
+            $data['pulang'] = Carbon::now()->locale('id')->isoFormat('Y-MM-D H:m:s');
+            $item->update($data);
+            $hadir = Carbon::parse($item->hadir);
+            $pulang = Carbon::parse($data['pulang']);
+            $lamakerja = $pulang->diffInMinutes($hadir) / 50;
+            $lembur = floor($lamakerja);
+            if ($lembur > 9) {
+                return view('frontend.lembur.input', []);
+            } else {
+                return redirect()->route('beranda')->withSuccess('Absensi Pulang Berhasil!');;
+            }
         }
+
+
     }
 
     /**

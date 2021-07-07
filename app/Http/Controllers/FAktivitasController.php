@@ -18,8 +18,9 @@ class FAktivitasController extends Controller
     public function index()
     {
         $id = Auth::user()->id;
-        $data = Aktivitas::whereDay('tanggal', date('d'))
+        $data = Aktivitas::whereDate('created_at', date('Y-m-d'))
                 ->where('id_user', $id)->get();
+
         return view('frontend.aktivitas.index', [
             'data' => $data,
 
@@ -52,10 +53,13 @@ class FAktivitasController extends Controller
     {
         $data = $request->all();
         $data['id_user'] = Auth::user()->id;
-        $data['status'] = 'ON PROGRESS';
-        Aktivitas::create($data);
-        Alert::success('Berhasil Menambahkan Data Aktivitas');
-        return redirect()->route('aktivitas.index');
+        $data['status'] = 'AKTIF';
+        $success = Aktivitas::create($data);
+        if($success){
+            return redirect()->route('aktivitas.index')->withSuccess('Tambah Aktivitas Berhasil!');
+        }else{
+            return redirect()->route('aktivitas.index')->withToastError('Mohon Ulangi Kembali');
+        }
     }
 
     /**
@@ -66,7 +70,7 @@ class FAktivitasController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**

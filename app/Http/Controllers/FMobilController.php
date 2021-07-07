@@ -41,10 +41,11 @@ class FMobilController extends Controller
         $cabang = Auth::user()->id_cabang;
         $data = $request->all();
         $data['id_cabang'] = $cabang;
-        // dd($data);
-        Mobil::create($data);
-        Alert::success('Berhasil Menambahkan Mobil');
-        return redirect()->route('ceklis.index');
+        $success = Mobil::create($data);
+        if($success){
+            return redirect()->route('beranda')->withSuccess('Berhasil Menambahkan Mobil');
+        }
+
     }
 
     /**

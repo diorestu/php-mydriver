@@ -11,7 +11,7 @@ Tambah Mobil
     <div class="navbar two-action no-hairline">
         <div class="navbar-inner d-flex align-items-center justify-content-between">
             <div class="left mr-0">
-                <a href="{{ route('ceklis.index') }}" class="back link d-flex align-items-center">
+                <a href="{{ route('beranda') }}" class="back link d-flex align-items-center">
                     <i class="fas fa-arrow-left"></i>
                 </a>
             </div>

@@ -53,9 +53,12 @@ class FBensinController extends Controller
         $data['id_user'] = $id;
         $data['status'] = 'PENDING';
         $data['tanggal'] = date('Y-m-d');
-        Bensin::create($data);
-        Alert::success('Catat BBM Berhasil!');
-        return redirect('/bensin');
+        $success = Bensin::create($data);
+        if ($success) {
+            return redirect()->route('bensin.index')->withSuccess('Catat Pembelian BBM Berhasil!');
+        } else {
+            return redirect()->route('bensin.index')->withToastError('Terjadi Kesalahan : Mohon Ulangi Kembali');
+        }
     }
 
     /**
@@ -100,6 +103,12 @@ class FBensinController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deleted = Bensin::where('id', $id)->delete();
+        if($deleted){
+            return redirect()->route('beranda')->withToastSuccess('Data Telah Dihapus');
+        }else{
+            return redirect()->route('beranda')->withToastError('Data Tidak Ditemukan');
+        }
+
     }
 }

@@ -30,7 +30,10 @@ class BackMobilController extends Controller
      */
     public function create()
     {
-        //
+        $cabang = Cabang::all();
+        return view('backend.mobil.create', [
+            'cabang' => $cabang,
+        ]);
     }
 
     /**

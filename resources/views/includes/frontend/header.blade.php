@@ -11,6 +11,11 @@
                             Beranda
                         </a>
                     </li>
+                    <li>
+                        <a class="panel-close" href="{{ route('profil') }}">
+                            Profil
+                        </a>
+                    </li>
                     <li class="submenu">
                         <a href="#"><span>Absensi</span> <span class="menu-arrow"></span></a>
                         <ul style="display: none;">
@@ -39,11 +44,7 @@
                             <li><a class="panel-close" href="{{ route('bensin.index') }}"> Lihat Catatan BBM Saya</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a class="panel-close" href="{{ route('profil') }}">
-                            Profil
-                        </a>
-                    </li>
+
                     <li>
                         <button class="btn btn-danger btn-block"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Keluar

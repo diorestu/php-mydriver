@@ -24,13 +24,16 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected static $imageFields = [
-        'photos' => [
-            'width' => 480,
-            'resize_image_quality' => 75,
-            'path' => 'user',
-        ],
-    ];
+    // protected static $imageFields = [
+    //     'photos' => [
+    //         'width' => 320,
+    //         'height' => 320,
+    //         'resize_image_quality' => 80,
+    //         'path' => 'user',
+    //         'crop' => true,
+
+    //     ],
+    // ];
 
     public function cabang(){
         return $this->hasOne(Cabang::class, 'id', 'id_cabang');

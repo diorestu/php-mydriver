@@ -96,14 +96,11 @@ class FUserController extends Controller
             }else{
                 $user->photos = null;
             }
-
             if ($data['id_unit'] == 0) {
                 $user->id_unit = null;
             } else {
                 $user->id_unit = $data['id_unit'];
             }
-
-
             $user->name = $data['name'];
             $user->phone = $data['phone'];
             $user->id_cabang = $data['id_cabang'];

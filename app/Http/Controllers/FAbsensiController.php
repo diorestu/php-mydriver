@@ -18,11 +18,15 @@ class FAbsensiController extends Controller
         $id = Auth::id();
         $data = User::with('cabang')->where('id', $id)->first();
         $dataabsen = Absensi::with('user')->where('id_user', $id)->whereDay('created_at', date('d'))->first();
-        // dd($dataabsen);
-        return view('frontend.absen.index', [
-            'data' => $data,
-            'absen' => $dataabsen,
-        ]);
+        if($dataabsen->hadir != null && $dataabsen->pulang != null){
+            return redirect()->route('beranda')->withToastWarning('Anda sudah selesai absensi hari ini!');
+        }else{
+            return view('frontend.absen.index', [
+                'data' => $data,
+                'absen' => $dataabsen,
+            ]);
+        }
+
     }
 
     /**
@@ -117,12 +121,12 @@ class FAbsensiController extends Controller
         if ($validator->fails()) {
             return back()->with('toast_error', 'Error : Mohon isikan keterangan Anda.');
         } else {
-            $item = Absensi::where('id_user', $id)->whereDay('created_at', date('d'))->first();
+            $item = Absensi::where('id_user', $id)->whereDate('created_at', date('Y-m-d'))->first();
             $data['pulang'] = Carbon::now()->locale('id')->isoFormat('Y-MM-D H:m:s');
             if ($request->hasFile('img_hadir')) {
                 // Upload Images
                 $name = Str::slug(auth()->user()->name);
-                $originalImage = $request->file('photos');
+                $originalImage = $request->file('img_hadir');
                 $thumbnailImage = Image::make($originalImage);
                 $thumbnailPath = public_path() . '/storage/absensi/';
                 $thumbnailImage->fit(320)->rotate(90);

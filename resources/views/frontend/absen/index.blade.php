@@ -99,7 +99,6 @@ Absensi
         @php
         if ($absen != null) {
         if ($pulang != '--:--') {
-        echo "<h4 class='text-center'>Anda telah selesai bertugas, silakan beristirahat.</br> Terima Kasih</h4>";
         } else {
         echo "<a id='btn' href='" .
                     route('absen.edit', $absen->id) .

@@ -82,27 +82,33 @@ class FUserController extends Controller
         if ($validator->fails()) {
             return back()->with('toast_error', 'Error : Mohon melengkapi data Anda');
         }else{
+            $user = User::findOrFail($id);
+            // cek gambar yang diupload
+            if ($request->hasFile('img_hadir')){
+                // Upload Images
+                $name = Str::slug(auth()->user()->name);
+                $originalImage = $request->file('photos');
+                $thumbnailImage = Image::make($originalImage);
+                $thumbnailPath = public_path() . '/storage/uploads/';
+                $thumbnailImage->fit(320);
+                $thumbnailImage->save($thumbnailPath . time() . '-' . $name . '.jpg');
+                $user->photos = time() . '-' . $name . '.jpg';
+            }else{
+                $user->photos = null;
+            }
 
-            // Upload Images
-        $name = Str::slug(auth()->user()->name);
-        $originalImage = $request->file('photos');
-        $thumbnailImage = Image::make($originalImage);
-        $thumbnailPath = public_path() . '/storage/uploads/';
-        $thumbnailImage->fit(320);
-        // ->rotate(270);
-        $thumbnailImage->save($thumbnailPath .time() . '-' . $name . '.jpg');
-
-        $user = User::findOrFail($id);
-
-        $user->photos = time() .'-'. $name.'.jpg';
-            $user->name = $data['name'];
-            $user->phone = $data['phone'];
-            $user->id_cabang = $data['id_cabang'];
             if ($data['id_unit'] == 0) {
                 $user->id_unit = null;
             } else {
                 $user->id_unit = $data['id_unit'];
             }
+
+
+            $user->name = $data['name'];
+            $user->phone = $data['phone'];
+            $user->id_cabang = $data['id_cabang'];
+            $user->pool = $data['pool'];
+
             $user->save();
             return redirect()->route('profil')->withSuccess('Profil Telah Diperbarui');
         }

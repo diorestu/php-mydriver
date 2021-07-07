@@ -66,7 +66,7 @@ class HomeController extends Controller
     }
 
 
-    public function getCountries()
+    public function getCabang()
     {
         $id = Auth::user()->id;
         $data = User::findOrFail($id);
@@ -80,10 +80,10 @@ class HomeController extends Controller
         ]);
     }
 
-    public function getStates($id)
+    public function getUnit($id)
     {
-        $states = UnitKerja::where("id_cabang", $id)->pluck('nama', 'id');
-        return json_encode($states);
+        $unit = UnitKerja::where('id_cabang', $id)->pluck('nama', 'id');
+        return response()->json($unit);
     }
 
 

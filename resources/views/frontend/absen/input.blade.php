@@ -97,7 +97,7 @@ Absensi
     </div>
 </div>
 <div class="list no-hairlines custom-form m-0">
-    <div class="card-box">
+    <div class="card-box pt-0">
         <form method="POST" action="{{ route('absen.store') }}" enctype="multipart/form-data">
             @csrf
             <ul class="no-border p-0 m-0">
@@ -124,7 +124,7 @@ Absensi
                     </div>
                 </li> --}}
                 <li class="item-content item-input">
-                    <div class="profile-header bg-light p-2">
+                    <div class="profile-header bg-light p-2 pt-3">
                         <div class="pro-img-box">
                             <img alt=""
                                 src="{{ asset('frontend/img/placeholder.png') }}">

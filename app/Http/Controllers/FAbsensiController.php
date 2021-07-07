@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 use App\User;
 use App\Absensi;
-use Illuminate\Support\Facades\Validator;
-use Auth;
-use Alert;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class FAbsensiController extends Controller
 {
@@ -42,16 +43,26 @@ class FAbsensiController extends Controller
 
         $validator = Validator::make($data, [
             'deskripsi' => 'required',
+            'img_hadir' => 'required|mimes:jpeg,jpg,png,gif',
         ]);
 
         if ($validator->fails()) {
-            return back()->with('toast_error', 'Error : Mohon isikan keterangan Anda.');
+            return back()->with('toast_error', 'Error : Mohon lengkapi absensi Anda.');
         }else{
             $data['id_user'] = $id;
-            $data['hadir'] = Carbon::now()->locale('id')->isoFormat('Y-MM-DD hh:m:s');
-            // dd($data['hadir']);
-            $cek = Absensi::where('id_user', $id)->whereDate('hadir', $data['hadir'])->count();
-            // dd($cek);
+            $data['hadir'] = Carbon::now()->locale('id')->isoFormat('Y-MM-DD H:m:s');
+            if ($request->hasFile('img_hadir')) {
+                // Upload Images
+                $name = Str::slug(auth()->user()->name);
+                $originalImage = $request->file('img_hadir');
+                $thumbnailImage = Image::make($originalImage);
+                $thumbnailPath = public_path() . '/storage/absensi/';
+                $thumbnailImage->fit(320)->rotate(90);
+                $thumbnailImage->save($thumbnailPath . time() . '-' . $name . 'hadir.jpg');
+            } else {
+                $data['img_hadir'] = null;
+            }
+            $cek = Absensi::where('id_user', $id)->whereDate('hadir', date('Y-m-d'))->count();
             if($cek > 0){
                 return redirect()->route('beranda')->with('toast_error', 'Anda sudah Absen Hadir.');
             }else{
@@ -59,16 +70,6 @@ class FAbsensiController extends Controller
                 return redirect()->route('beranda')->withSuccess('Absensi Hadir Berhasil');
             }
         }
-        // // Rotate Image
-        // $photo           = request()->file('img_hadir');
-        // $temp            = imagecreatefromjpeg($photo);
-        // $rotated         = imagerotate($temp, 270, 0);
-        // $extension       = $photo->getClientOriginalExtension();
-        // $fileNametoStore = time() . "___" . explode('.', $photo->getClientOriginalName())[0] . '.' . $extension;
-        // imagejpeg($rotated,  $fileNametoStore);
-        // // Rotate Image
-
-
     }
 
     /**
@@ -113,22 +114,38 @@ class FAbsensiController extends Controller
         $validator = Validator::make($data, [
             'deskripsi' => 'required',
         ]);
-
         if ($validator->fails()) {
             return back()->with('toast_error', 'Error : Mohon isikan keterangan Anda.');
         } else {
             $item = Absensi::where('id_user', $id)->whereDay('created_at', date('d'))->first();
             $data['pulang'] = Carbon::now()->locale('id')->isoFormat('Y-MM-D H:m:s');
-            $item->update($data);
-            $hadir = Carbon::parse($item->hadir);
-            $pulang = Carbon::parse($data['pulang']);
-            $lamakerja = $pulang->diffInMinutes($hadir) / 50;
-            $lembur = floor($lamakerja);
-            if ($lembur > 9) {
-                return view('frontend.lembur.input', []);
+            if ($request->hasFile('img_hadir')) {
+                // Upload Images
+                $name = Str::slug(auth()->user()->name);
+                $originalImage = $request->file('photos');
+                $thumbnailImage = Image::make($originalImage);
+                $thumbnailPath = public_path() . '/storage/absensi/';
+                $thumbnailImage->fit(320)->rotate(90);
+                $thumbnailImage->save($thumbnailPath . time() . '-' . $name . 'pulang.jpg');
+                $item->img_pulang = time() . '-' . $name . '.jpg';
             } else {
-                return redirect()->route('beranda')->withSuccess('Absensi Pulang Berhasil!');;
+                $item->img_pulang = null;
             }
+            $success = $item->update($data);
+            if($success){
+                $hadir = Carbon::parse($item->hadir);
+                $pulang = Carbon::parse($data['pulang']);
+                $lamakerja = $pulang->diffInMinutes($hadir) / 50;
+                $lembur = floor($lamakerja);
+                if ($lembur > 9) {
+                    return view('frontend.lembur.input', []);
+                } else {
+                    return redirect()->route('beranda')->withSuccess('Absensi Pulang Berhasil!');
+                }
+            }else{
+                return redirect()->route('beranda')->withErro('Mohon Ulangi Kembali!');
+            }
+
         }
 
 

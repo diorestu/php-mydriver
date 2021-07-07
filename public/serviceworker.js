@@ -27,8 +27,6 @@ self.addEventListener("install", event => {
     )
 });
 
-
-
 // Clear cache on activate
 self.addEventListener('activate', event => {
     event.waitUntil(
@@ -76,3 +74,13 @@ self.addEventListener("notificationclick", function(event) {
 
     event.waitUntil(clients.openWindow("https://developers.google.com/web/"));
 });
+
+self.addEventListener('load', function() {
+    self.history.pushState({ noBackExitsApp: true }, '')
+})
+
+self.addEventListener('popstate', function(event) {
+    if (event.state && event.state.noBackExitsApp) {
+        self.history.pushState({ noBackExitsApp: true }, '')
+    }
+})

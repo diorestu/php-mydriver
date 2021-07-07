@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 Route::middleware(['auth', 'revalidate'])->group(function () {
     Route::get('/', 'HomeController@index')->name('beranda');
-    Route::get('/profile', 'HomeController@getCountries')->name('profil');
+    Route::get('/profile', 'HomeController@getCabang')->name('profil');
+    Route::get('/profile/{id}', 'HomeController@getUnit')->name('profile.unit');
     Route::resource('profil', 'FUserController');
     Route::resource('absen', 'FAbsensiController');
     Route::post('absen/hadir', 'FAbsensiController@hadir')->name('absen-hadir');

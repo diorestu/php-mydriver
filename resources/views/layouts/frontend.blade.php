@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <!-- Web Application Manifest -->
     <link rel="manifest" href="{{ asset('manifest.json') }}">
-    <meta name="theme-color" content="#488aff">
+    <meta name="theme-color" content="#316900">
+
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="SID">
     <link rel="icon" sizes="128x128" href="{{ asset('images/icons/128x128.png') }}">
@@ -14,7 +15,8 @@
     <meta name="apple-mobile-web-app-title" content="Brew">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('images/icons/152x152.png') }}" type="image/png">
-    <link rel="mask-icon" href="{{ asset('images/icons/128x128.png') }}" color="#488aff">
+    <link rel="mask-icon" href="{{ asset('images/icons/128x128.png') }}" color="#316900">
+
     <script async src="https://unpkg.com/pwacompat" crossorigin="anonymous"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @laravelPWA
@@ -102,6 +104,26 @@
             console.warn('Push messaging is not supported');
             pushButton.textContent = 'Push Not Supported';
         }
+
+        var backPresses = 0;
+        var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+        var maxBackPresses = 2;
+
+        function handleBackButton(init) {
+            if (init !== true)
+                backPresses++;
+            if ((!isAndroid && backPresses >= maxBackPresses) ||
+                (isAndroid && backPresses >= maxBackPresses - 1)) {
+                window.history.back();
+            else
+                window.history.pushState({}, '');
+            }
+
+        function setupWindowHistoryTricks() {
+            handleBackButton(true);
+            window.addEventListener('popstate', handleBackButton);
+        }
+
     </script>
 </body>
 </html>

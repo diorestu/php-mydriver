@@ -19,7 +19,6 @@
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Absensi
         </a>
     </div>
-
 </div>
 
 <div class="row">
@@ -73,6 +72,13 @@
                                     <a href="{{ route('absensi.show', $item->id) }}">
                                         <span class="badge badge-pill badge-info px-3 py-2"><i class="fas fa-eye"></i> Detail</span>
                                     </a>
+                                    <a class="badge badge-danger badge-pill px-3 py-2 text-white" onclick="event.preventDefault(); document.getElementById('form-delete').submit();">
+                                    <span><i class="fas fa-trash"></i></span>
+                                    </a>
+                                    <form id="form-delete" action="{{ route('absensi.destroy', $item->id) }}" method="POST" class="d-none">
+                                    @method('DELETE')
+                                    @csrf
+                                    </form>
                                 </td>
                             </tr>
                             @empty

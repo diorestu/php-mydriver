@@ -51,7 +51,7 @@ Riwayat Bahan Bakar
             </div>
             @empty
             <div class="text-center">
-                <h5>Belum Ada Catatan</h5>
+                <h6>Belum Ada Catatan</h6>
             </div>
             @endforelse
         </div>

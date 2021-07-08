@@ -26,36 +26,33 @@
 
     <div class="page-content">
         <div class="list no-hairlines media-list project-list">
-            <div class="container">
-                <ul class="row">
-                    @forelse ($data as $item)
-                    <li class="col-12">
-                        <a href="javascript:void;" class="item-link item-content p-0 pt-2">
-                            <div class="item-inner">
-                                <div class="item-title-row">
-                                    <div class="item-title">
-                                        <h4 class="mb-1">{{ $item->deskripsi }}</h4>
-                                    </div>
-                                </div>
-                                <p class="m-0" style="font-size: 13px;">{{ number_format($item->km_awal) }} km - {{ number_format($item->km_akhir) }} km</p>
-                                <div class="pro-info clearfix">
-                                    <div class="pro-left">
-                                        <p>{{ Carbon\Carbon::parse($item->created_at)->locale('id')->isoFormat('dddd, LL') }}</p>
-                                    </div>
-                                    <div class="pro-right">
-                                        <p class="badge badge-pill {{ ($item->status == 'SELESAI') ? 'badge-success' : 'badge-primary' }} px-4 py-2 rounded">{{ $item->status }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    @empty
-                    <li class="col-12 text-center">
-                        <h5 class="pt-3 p-1">Tidak Ada Data Riwayat Aktivitas</h5>
-                    </li>
-                    @endforelse
-                </ul>
+            @forelse ($data as $item)
+            <div class="card d-flex shadow mx-3">
+              <div class="card-body d-flex justify-content-between">
+                <div>
+                  <p>{{ ($item->deskripsi) }}</p>
+                  <small class="m-0" style="font-size: 13px;">{{ number_format($item->km_awal) }} km - {{ number_format($item->km_akhir) }} km</small>
+                  <small class="badge badge-pill {{ ($item->status == 'SELESAI') ? 'badge-success' : 'badge-primary' }} px-4 py-2 rounded">{{ $item->status }}</small>
+
+                </div>
+                <div>
+                  <a class="badge badge-danger badge-pill px-3 py-2 text-white" onclick="event.preventDefault(); document.getElementById('form-delete').submit();">
+                    <span><i class="fas fa-trash"></i></span>
+                  </a>
+                  <form id="form-delete" action="{{ route('aktivitas.destroy', $item->id) }}" method="POST" class="d-none">
+                    @method('DELETE')
+                    @csrf
+                  </form>
+                </div>
+              </div>
             </div>
+            @empty
+            <h6 class="text-center mt-2">Tidak Ada Catatan</h6>
+            @endforelse
+
+
+
+
         </div>
     </div>
 </div>

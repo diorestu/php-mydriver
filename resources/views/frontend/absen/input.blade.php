@@ -5,6 +5,10 @@ Absensi
 @endsection
 
 @push('addon-style')
+<link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+
 <style>
     .bg-berhasil {
         background: #F0FFF0;
@@ -79,6 +83,8 @@ Absensi
     transition: all 0.2s;
     }
 </style>
+
+
 @endpush
 
 @section('content')
@@ -110,7 +116,7 @@ Absensi
                     <div class="item-inner">
                         <div class="item-title item-label">Keterangan</div>
                         <div class="item-input-wrap">
-                            <textarea name="deskripsi"></textarea>
+                            <textarea name="deskripsi" required></textarea>
                             <span class="input-clear-button"></span>
                         </div>
                     </div>
@@ -124,17 +130,18 @@ Absensi
                     </div>
                 </li> --}}
                 <li class="item-content item-input">
-                    <div class="profile-header bg-light p-2 pt-3">
-                        <div class="pro-img-box">
-                            <img alt=""
-                                src="{{ asset('frontend/img/placeholder.png') }}">
-                            <div class="pro-img-upload">
-                                <input type="file" class="upload" name="img_hadir">
-                            </div>
-                        </div>
-                        <p class="mt-2 mb-0 text-center text-dark">Klik Kamera untuk Upload Foto</p>
+                  <div class="profile-header bg-light p-2 pt-3">
+                    <div class="pro-img-box">
+                      <img alt="" src="{{ asset('frontend/img/placeholder.png') }}">
+                      <div class="pro-img-upload">
+                        <input type="file" class="upload" name="img_hadir" onchange="readURL(this);">
+                      </div>
                     </div>
+                    <p class="mt-2 mb-0 text-center text-dark">Klik Kamera untuk Upload Foto</p>
+                    <img id="blah" src="#" alt="Bukti Cuti Saya" class="" />
+                  </div>
                 </li>
+
                 <li class="item-content item-input">
                     <div class="item-inner">
                         <div class="item-input-wrap">
@@ -145,7 +152,7 @@ Absensi
                 </li>
             </ul>
             <div class="punch-btn">
-                <button type="submit" class="button button-big button-purple py-4">Absen</button>
+                <button type="submit" class="button button-big button-purple py-4">Absen Hadir</button>
             </div>
         </form>
 
@@ -155,6 +162,20 @@ Absensi
 @endsection
 
 @push('addon-script')
+<script>
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        $('#blah')
+          .attr('src', e.target.result)
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+</script>
 
 <script>
     var demo = document.getElementById("demo");
@@ -195,6 +216,5 @@ Absensi
     }
 
 </script>
-
 
 @endpush

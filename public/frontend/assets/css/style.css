@@ -2273,18 +2273,18 @@ li.media-item .item-title {
 
 .profile-header .pro-img-box {
     background: transparent;
-    height: 100px;
+    height: 75px;
     margin: 0 auto;
     text-align: center;
-    width: 100px;
+    width: 75px;
     position: relative;
 }
 
 .profile-header .pro-img-box>img {
     background: #fff;
     border-radius: 50%;
-    height: 100px;
-    width: 100px;
+    height: 75px;
+    width: 75px;
 }
 
 .profile-header .pro-user-det {

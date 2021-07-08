@@ -18,7 +18,7 @@ class FCeklisController extends Controller
     public function index()
     {
         $id = Auth::user()->id;
-        $data = Checklist::where('id_user', $id)->whereDay('created_at', date('d'))->get();
+        $data = Checklist::where('id_user', $id)->whereDate('created_at', date('Y-m-d'))->get();
 
         return view('frontend.ceklis.index', [
             'data' => $data,

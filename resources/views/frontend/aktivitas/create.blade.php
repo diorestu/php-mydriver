@@ -41,7 +41,7 @@
                         </li>
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <div class="item-title item-label">Pengguna</div>
+                                <div class="item-title item-label">Nama Penumpang</div>
                                 <div class="item-input-wrap">
                                     <input class="form-control" type="text" name="customer">
                                 </div>

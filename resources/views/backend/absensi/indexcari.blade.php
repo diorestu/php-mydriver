@@ -47,8 +47,7 @@
                                 <th class="text-center">Nama</th>
                                 <th width="15%" class="text-center">Jam Hadir</th>
                                 <th width="15%" class="text-center">Jam Pulang</th>
-
-                                <th class="text-center" width="5%">Opsi</th>
+                                <th class="text-center" width="10%">Opsi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,13 +58,21 @@
                             <tr>
 
                                 <td class="text-center">{{ $no++ }}</td>
-                                <td>{{ $item->user->name }}</td>
+                                <td>{{ strtoupper($item->user->name) }}</td>
                                 <td class="text-center">{{ ($item->hadir != null    ) ? Carbon\Carbon::parse($item->hadir)->format('h:m') : '--:--' }}</td>
                                 <td class="text-center">{{ ($item->pulang != null) ? Carbon\Carbon::parse($item->pulang)->format('h:m') : '--:--' }}</td>
                                 <td class="text-center">
+
                                     <a class="btn btn-sm btn-info" href="{{ route('absensi.edit', $item->id) }}">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
+                                    <a class="badge badge-danger badge-pill px-3 py-2 text-white" onclick="event.preventDefault(); document.getElementById('form-delete').submit();">
+                                      <span><i class="fas fa-trash"></i></span>
+                                    </a>
+                                    <form id="form-delete" action="{{ route('absensi.destroy', $item->id) }}" method="POST" class="d-none">
+                                      @method('DELETE')
+                                      @csrf
+                                    </form>
                                 </td>
                             </tr>
                             @empty

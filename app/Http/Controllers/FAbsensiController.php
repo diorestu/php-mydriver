@@ -18,7 +18,12 @@ class FAbsensiController extends Controller
         $id = Auth::id();
         $data = User::with('cabang')->where('id', $id)->first();
         $dataabsen = Absensi::with('user')->where('id_user', $id)->whereDay('created_at', date('d'))->first();
-        if($dataabsen->hadir != null && $dataabsen->pulang != null){
+        if($dataabsen == null){
+            return view('frontend.absen.index', [
+                'data' => $data,
+                'absen' => $dataabsen,
+            ]);
+        }elseif($dataabsen->pulang != null){
             return redirect()->route('beranda')->withToastWarning('Anda sudah selesai absensi hari ini!');
         }else{
             return view('frontend.absen.index', [
@@ -26,7 +31,6 @@ class FAbsensiController extends Controller
                 'absen' => $dataabsen,
             ]);
         }
-
     }
 
     /**
@@ -71,7 +75,7 @@ class FAbsensiController extends Controller
                 return redirect()->route('beranda')->with('toast_error', 'Anda sudah Absen Hadir.');
             }else{
                 Absensi::create($data);
-                return redirect()->route('beranda')->withSuccess('Absensi Hadir Berhasil');
+                return redirect()->route('beranda')->withToastSuccess('Absensi Hadir Berhasil');
             }
         }
     }
@@ -122,34 +126,38 @@ class FAbsensiController extends Controller
             return back()->with('toast_error', 'Error : Mohon isikan keterangan Anda.');
         } else {
             $item = Absensi::where('id_user', $id)->whereDate('created_at', date('Y-m-d'))->first();
-            $data['pulang'] = Carbon::now()->locale('id')->isoFormat('Y-MM-D H:m:s');
-            if ($request->hasFile('img_hadir')) {
-                // Upload Images
-                $name = Str::slug(auth()->user()->name);
-                $originalImage = $request->file('img_hadir');
-                $thumbnailImage = Image::make($originalImage);
-                $thumbnailPath = public_path() . '/storage/absensi/';
-                $thumbnailImage->fit(320)->rotate(90);
-                $thumbnailImage->save($thumbnailPath . time() . '-' . $name . 'pulang.jpg');
-                $item->img_pulang = time() . '-' . $name . '.jpg';
-            } else {
-                $item->img_pulang = null;
-            }
-            $success = $item->update($data);
-            if($success){
-                $hadir = Carbon::parse($item->hadir);
-                $pulang = Carbon::parse($data['pulang']);
-                $lamakerja = $pulang->diffInMinutes($hadir) / 50;
-                $lembur = floor($lamakerja);
-                if ($lembur > 9) {
-                    return view('frontend.lembur.input', []);
-                } else {
-                    return redirect()->route('beranda')->withSuccess('Absensi Pulang Berhasil!');
-                }
+            if($item->hadir != null && $item->pulang != null){
+                return redirect('/')->withToastWarning('Anda sudah selesai Absensi');
             }else{
-                return redirect()->route('beranda')->withErro('Mohon Ulangi Kembali!');
+                // $item = Absensi::where('id_user', $id)->whereDate('created_at', date('Y-m-d'))->first();
+                $data['pulang'] = Carbon::now()->locale('id')->isoFormat('Y-MM-D H:m:s');
+                if ($request->hasFile('img_hadir')) {
+                    // Upload Images
+                    $name = Str::slug(auth()->user()->name);
+                    $originalImage = $request->file('img_hadir');
+                    $thumbnailImage = Image::make($originalImage);
+                    $thumbnailPath = public_path() . '/storage/absensi/';
+                    $thumbnailImage->fit(320)->rotate(90);
+                    $thumbnailImage->save($thumbnailPath . time() . '-' . $name . 'pulang.jpg');
+                    $item->img_pulang = time() . '-' . $name . '.jpg';
+                } else {
+                    $item->img_pulang = null;
+                }
+                $success = $item->update($data);
+                if ($success) {
+                    $hadir = Carbon::parse($item->hadir);
+                    $pulang = Carbon::parse($data['pulang']);
+                    $lamakerja = $pulang->diffInMinutes($hadir) / 50;
+                    $lembur = floor($lamakerja);
+                    if ($lembur > 9) {
+                        return view('frontend.lembur.input', []);
+                    } else {
+                        return redirect()->route('beranda')->withSuccess('Absensi Pulang Berhasil!');
+                    }
+                } else {
+                    return redirect()->route('beranda')->withErro('Mohon Ulangi Kembali!');
+                }
             }
-
         }
 
 

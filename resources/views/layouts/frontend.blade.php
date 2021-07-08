@@ -27,18 +27,18 @@
     @stack('addon-style')
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Nunito&family=Inter:wght@200;300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Poppins&family=Nunito&family=Inter:wght@200;300;400;600;800&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Poppins';
+            font-family: 'Nunito';
             font-weight: 100;
         }
         h1, h2, strong{
-            font-family: 'Inter';
+            font-family: 'Nunito';
             font-weight: 800;
         }
         p{
-            font-family: 'Nunito';
+            font-family: 'Montserrat';
         }
     </style>
 </head>

@@ -84,7 +84,7 @@ class FUserController extends Controller
         }else{
             $user = User::findOrFail($id);
             // cek gambar yang diupload
-            if ($request->hasFile('img_hadir')){
+            if ($request->hasFile('photos')){
                 // Upload Images
                 $name = Str::slug(auth()->user()->name);
                 $originalImage = $request->file('photos');

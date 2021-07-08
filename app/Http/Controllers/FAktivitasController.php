@@ -52,13 +52,20 @@ class FAktivitasController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['id_user'] = Auth::user()->id;
-        $data['status'] = 'AKTIF';
-        $success = Aktivitas::create($data);
-        if($success){
-            return redirect()->route('aktivitas.index')->withSuccess('Tambah Aktivitas Berhasil!');
-        }else{
-            return redirect()->route('aktivitas.index')->withToastError('Mohon Ulangi Kembali');
+        $validator = Validator::make($data, [
+            'deskripsi' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return back()->with('toast_error', 'Error : Mohon isikan keterangan Anda.');
+        } else {
+            $data['id_user'] = Auth::user()->id;
+            $data['status'] = 'SELESAI';
+            $success = Aktivitas::create($data);
+            if ($success) {
+                return redirect()->route('aktivitas.index')->withSuccess('Tambah Aktivitas Berhasil!');
+            } else {
+                return redirect()->route('aktivitas.index')->withToastError('Mohon Ulangi Kembali');
+            }
         }
     }
 
@@ -72,7 +79,6 @@ class FAktivitasController extends Controller
     {
 
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -117,6 +123,11 @@ class FAktivitasController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deleted = Aktivitas::where('id', $id)->delete();
+        if ($deleted) {
+            return redirect()->route('beranda')->withToastSuccess('Data Telah Dihapus');
+        } else {
+            return redirect()->route('beranda')->withToastError('Data Tidak Ditemukan');
+        }
     }
 }

@@ -37,7 +37,6 @@ class BackAbsenController extends Controller
 
         $dataoff = User::where('id_cabang', $cabang)
             ->where('roles', 4)
-            ->where('pool', 1)
             ->whereNotIn('id', $useroff)
             ->get();
 
@@ -56,7 +55,7 @@ class BackAbsenController extends Controller
         $tanggal = Carbon::parse($dt['tanggal'])->format('Y-m-d');
         $cabang = Auth::user()->id_cabang;
         $staff = User::where('id_cabang', $cabang)->get();
-        $data = Absensi::with(['user'])->whereDate('created_at',$tanggal)->get();
+        $data = Absensi::with(['user'])->whereDate('created_at',$tanggal)->orderBy('id_user', 'ASC')->get();
 
         return view('backend.absensi.indexcari', [
             'tanggal'   => $tanggal,
@@ -147,6 +146,11 @@ class BackAbsenController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deleted = Absensi::where('id', $id)->delete();
+        if ($deleted) {
+            return redirect()->route('absensi.index')->withToastSuccess('Data Telah Dihapus');
+        } else {
+            return redirect()->route('absensi.index')->withToastError('Data Tidak Ditemukan');
+        }
     }
 }

@@ -120,7 +120,7 @@ Absensi
 
             if ($data->pool == 3 || $data->pool == 4) {
 
-            $radius = 500;
+            $radius = 5000;
             } else {
             $radius = 250000;
             }
